@@ -1,0 +1,286 @@
+<div class="card">
+    <div class="card-header">
+      <h3> Book Title <button class="btn btn-lg btn-primary" (click)="openAdd()" style="float: right;"><i class="fa fa-plus"></i></button></h3>
+      
+    </div>
+    <div class="card-body">
+        <ngx-datatable
+        class="bootstrap"
+        [rows]="bookTitles"
+        [columns]="columns"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [summaryRow]="true"
+        rowHeight="auto"
+        [externalPaging]="true"
+        [count]="page.totalRows"
+        [offset]="page.pageNumber"
+        [limit]="page.pageSize"
+        (page)="loadDatas($event)"
+      >
+      <ngx-datatable-column name="Name" prop = "bookTitleName"></ngx-datatable-column>
+      <ngx-datatable-column name="Phone" prop = "edition"></ngx-datatable-column>
+      <ngx-datatable-column name="Email" prop = "size"></ngx-datatable-column>
+      <ngx-datatable-column name="Address" prop = "page"></ngx-datatable-column>
+      <ngx-datatable-column name="Author">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{row.authors.name}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Option">
+            <ng-template let-column="column" ngx-datatable-header-template></ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                    <button class="btn btn-success" (click)="openEdit($event, row.id)"><i class="fa fa-edit"></i></button>
+                    <button class="btn btn-danger" (click)="delete($event, row.id)"><i class="fa fa-trash"></i></button>
+            </ng-template>
+          </ngx-datatable-column>
+      </ngx-datatable>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Author</th>
+                        <th>Subject</th>
+                        <th>Publishing Info</th>
+                        <th>Edition</th>
+                        <th>Call Number</th>
+                        <th>ISBN</th>
+                        <th style="width: 150px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of bookTitles">
+                        <td>{{row.image}}</td>
+                        <td> {{row.bookTitleName}}</td>
+                        <td><span *ngFor ="let author of row.authors">{{author.authorName}}, </span></td>
+                        <td><span *ngFor ="let subject of row.subjects">{{subject.subjectName}}, </span></td>
+                        <td>{{row.publishingInfo}}</td>
+                        <td>{{row.edition}}</td>
+                        <td> {{row.callNumber}}</td>
+                        <td>{{row.ISBN}}</td>
+                        <td>
+                            <button class="btn btn-info" (click)="openDetail($event, row.id)"><i class="fa fa-eye"></i></button>
+                            <button class="btn btn-success" (click)="openEdit($event, row.id)"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger" (click)="delete($event, row.id)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1"
+          role="dialog" aria-labelledby="dialog-child-name">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h4 id="dialog-child-name" class="modal-title pull-left">{{action}} Book Title</h4>
+             <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+               <span aria-hidden="true">&times;</span>
+             </button>
+           </div>
+           <div class="modal-body">
+            <form [formGroup] = "bookTForm">
+              <div class="form-group row" >
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Name</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtBookTitleName" name="bookTitleName" formControlName="bookTitleName" placeholder="">
+                    </div>
+            </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Edition</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtEdition" name="edition" formControlName="edition" placeholder="">
+                  </div>
+                </div>
+              <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Page</label>
+                  <div class="col-sm-9">
+                      <input type="number" class="form-control col-lg-10" id="txtPage" name="page" formControlName="page" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Size</label>
+                  <div class="col-sm-9">
+                      <input type="number" class="form-control col-lg-10" id="txtSize" name="size" formControlName="size" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Publishing Info</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtPublishingInfo" name="publishingInfo" formControlName="publishingInfo" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Call Number</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtcallNumber" name="callNumber" formControlName="callNumber" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">ISBN</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtISBN" name="ISBN" formControlName="ISBN" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Description</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtDescription" name="description" formControlName="description" placeholder="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Image</label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control col-lg-10" id="txtImage" name="image" formControlName="image" placeholder="">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-dark" (click) = "save()">Save</button>
+                </div>
+            </form>
+           </div>
+         </div>
+       </div>
+     </div>
+      <div bsModal #detailModal="bs-modal" class="modal fade" tabindex="-1"
+          role="dialog" aria-labelledby="dialog-child-name">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h4 id="dialog-child-name" class="modal-title pull-left">{{action}} Book Title</h4>
+             <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+               <span aria-hidden="true">&times;</span>
+             </button>
+           </div>
+           <div class="modal-body">
+              <div class="row">
+                  <label class="col-sm-3 col-form-label col-form-label-sm">Image</label>
+                  <div class="col-sm-9">
+                      {{bookTitle.image}}
+                  </div>
+                </div>
+            <div class="row" >
+              <label class="col-sm-3 col-form-label col-form-label-sm">Name</label>
+              <div class="col-sm-9">
+                  {{bookTitle.bookTitleName}}
+                </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Author</label>
+              <div class="col-sm-9" *ngIf = "authors">
+                  <a href="#" (click)="showCollapse($event); isAuthors = !isAuthors" [attr.aria-expanded]="!isAuthors" aria-controls="collapseBasic">click here for list</a>
+                  <div id="collapseBasic" [collapse]="isAuthors" [isAnimated]="true">
+                      <div class="well well-lg">
+                        <span *ngFor ="let author of authors">{{author.authorName}}, </span>
+                      </div>
+                      <form [formGroup] = "bookTForm">
+                      <div class="row mt-2 mb-2" formGroupName = "authors">
+                        <div class="col-sm-6">
+                          <input type="text" (keydown.enter) = "addAuthor()" id="txtAuthorName" name="authorName" formControlName="authorName" placeholder="">
+                        </div>
+                        <div class="col-sm-6">
+                          <button type="button" class="btn btn-success btn-sm" (click) = "addAuthor()">Save</button>
+                        </div>
+                      </div>
+                    </form>
+                    </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Subject</label>
+              <div class="col-sm-9" *ngIf = "subjects">
+                  <a href="#" (click)="showCollapse($event); isSubjects = !isSubjects" [attr.aria-expanded]="!isSubjects" aria-controls="collapseBasic">click here for list</a>
+                  <div id="collapseBasic" [collapse]="isSubjects" [isAnimated]="true">
+                      <div class="well well-lg">
+                        <span *ngFor ="let subject of subjects">{{subject.subjectName}}, </span>
+                      </div>
+                      <form [formGroup] = "bookTForm">
+                        <div class="row mt-2 mb-2" formGroupName = "subjects">
+                          <div class="col-sm-6">
+                            <input type="text" (keydown.enter) = "addSubject()" id="txtSubjectName" name="subjectName" formControlName="subjectName" placeholder="">
+                          </div>
+                          <div class="col-sm-6">
+                            <button type="button" class="btn btn-success btn-sm" (click) = "addSubject()">Save</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Status</label>
+              <div class="col-sm-9">
+                <a href="#" (click)="showCollapse($event); listBook(); isBooks = !isBooks" [attr.aria-expanded]="!isBooks" aria-controls="collapseBasic">click here for detail</a>
+                  <div id="collapseBasic" [collapse]="isBooks" [isAnimated]="true">
+                      <div class="well well-lg">
+                        <table class="table table-bordered table-striped table-hover table-sm">
+                          <thead>
+                            <tr class="thead-light">
+                              <th>Date Import</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor = "let book of books">
+                              <td>{{book.dateImport}}</td>
+                              <td>{{book.status}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Edition</label>
+              <div class="col-sm-9">
+                {{bookTitle.edition}}
+              </div>
+            </div>
+          <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Page</label>
+              <div class="col-sm-9">
+                  {{bookTitle.page}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Size</label>
+              <div class="col-sm-9">
+                  {{bookTitle.size}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Publishing Info</label>
+              <div class="col-sm-9">
+                  {{bookTitle.publishingInfo}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Call Number</label>
+              <div class="col-sm-9">
+                  {{bookTitle.callNumber}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">ISBN</label>
+              <div class="col-sm-9">
+                  {{bookTitle.ISBN}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-3 col-form-label col-form-label-sm">Description</label>
+              <div class="col-sm-9" *ngIf = "bookTitle.description">
+                  <a href="#" (click)="showCollapse($event); isDescription = !isDescription" [attr.aria-expanded]="!isDescription" aria-controls="collapseBasic">{{bookTitle.description | slice:0:10}}...</a>
+                  <div id="collapseBasic" [collapse]="isDescription" [isAnimated]="true">
+                      <div class="well well-lg">{{bookTitle.description}}</div>
+                    </div>
+              </div>
+            </div>
+           </div>
+         </div>
+       </div>
+     </div>
+    </div>
+  </div>

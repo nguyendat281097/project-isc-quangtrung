@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-header">
+      <h3> Author </h3>
+      
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Book tilte name</th>
+                        <th>Author name</th>
+                        <th style="width: 150px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of authors">
+                        <td> {{row.BOT_ID}}</td>
+                        <td>{{row.authorName}}</td>
+                        <td>
+                            <button class="btn btn-danger" (click)="delete(row.id)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>

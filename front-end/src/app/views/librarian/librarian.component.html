@@ -1,0 +1,83 @@
+<div class="card">
+  <div class="card-header">
+    <h3> Librarian <button class="btn btn-lg btn-primary" (click)="openAdd()" style="float: right;"><i class="fa fa-plus"></i></button></h3>
+    
+  </div>
+  <div class="card-body">
+      <div class="table-responsive">
+          <table class="table table-hover table-bordered table-striped">
+              <thead>
+                  <tr>
+                      <th>Full Name</th>
+                      <th>Email</th>
+                      <th>Phone Number</th>
+                      <th>User Name</th>
+                      <th style="width: 150px;"></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let row of librarians">
+                      <td> {{row.fullName}}</td>
+                      <td>{{row.email}}</td>
+                      <td> {{row.phone}}</td>
+                      <td>{{row.userName}}</td>
+                      <td>
+                          <button class="btn btn-success" (click)="openEdit($event, row.id)"><i class="fa fa-edit"></i></button>
+                          <button class="btn btn-danger" (click)="delete($event, row.id)"><i class="fa fa-trash"></i></button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1"
+        role="dialog" aria-labelledby="dialog-child-name">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h4 id="dialog-child-name" class="modal-title pull-left">{{action}} Librarian</h4>
+           <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
+          <form [formGroup] = "libForm">
+            <div class="form-group row" >
+                <label class="col-sm-3 col-form-label col-form-label-sm">User Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control col-lg-10" id="txtUserName" name="userName" formControlName="userName" placeholder="">
+                  </div>
+          </div>
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label col-form-label-sm">Password</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control col-lg-10" id="txtPassword" name="password" formControlName="password" placeholder="******">
+                </div>
+              </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label col-form-label-sm">Full Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control col-lg-10" id="txtFullName" name="fullName" formControlName="fullName" placeholder="">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label col-form-label-sm">Email</label>
+                <div class="col-sm-9">
+                    <input type="email" class="form-control col-lg-10" id="txtEmail" name="email" formControlName="email" placeholder="">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label col-form-label-sm">Phone</label>
+                <div class="col-sm-9">
+                    <input type="tel" (keydown.enter)= "save()" class="form-control col-lg-10" id="txtPhone" name="phone" formControlName="phone" placeholder="">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click) = "save()">Save</button>
+              </div>
+          </form>
+         </div>
+       </div>
+     </div>
+   </div>
+  </div>
+</div>
